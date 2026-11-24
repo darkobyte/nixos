@@ -3,7 +3,7 @@ corner_radius_scale = 1.0
 font_family = "JetBrainsMono Nerd Font"
 time_format = "{:%H:%M:%S}"
 telemetry_enabled = false
-clipboard_enabled = true
+clipboard_enabled = false
 # Polkit authentication agent: password/fingerprint prompts for admin actions
 # (fprintd-enroll, mounting drives, ...). Without one they are denied outright.
 polkit_agent = true
