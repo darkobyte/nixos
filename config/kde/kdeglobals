@@ -1,0 +1,7 @@
+# Appended to Breeze's BreezeDark.colors by home/desktop/theme.nix
+
+[Icons]
+Theme=breeze-dark
+
+[KDE]
+widgetStyle=Breeze

@@ -1,0 +1,67 @@
+--- a/src/greeter/greeter_surface.cpp	2026-11-04 12:34:01.696376656 +0100
++++ b/src/greeter/greeter_surface.cpp	2026-11-04 12:34:01.737009412 +0100
+@@ -1159,8 +1159,8 @@
+   const float headerToContentGap = Style::spaceLg();
+   const float headerBlockHeight = headerTopPadding + headerGlyphBlock + subtitleGap + headerToContentGap;
+ 
+-  const float sessionRowH = rowHeight;
+-  const float sessionRowGap = rowGap;
++  const float sessionRowH = 0.0f;
++  const float sessionRowGap = 0.0f;
+ 
+   const float userBlockHeight = showsUserDropdown() ? rowHeight : 0.0f;
+   const float userPickerContentHeight = userBlockHeight + sessionRowGap + sessionRowH;
+@@ -1259,8 +1259,8 @@
+   m_loginPanel->setSize(panelWidth, panelHeight);
+   m_loginPanel->setStyle(
+       RoundedRectStyle{
+-          .fill = colorForRole(ColorRole::SurfaceVariant),
+-          .border = colorForRole(ColorRole::Outline),
++          .fill = colorForRole(ColorRole::SurfaceVariant, 0.0f),
++          .border = colorForRole(ColorRole::Outline, 0.0f),
+           .fillMode = FillMode::Solid,
+           .radius = Style::scaledRadiusXl(),
+           .softness = 1.0f,
+@@ -1328,7 +1328,7 @@
+   }
+ 
+   const bool showPasswordStep = m_passwordVisible;
+-  const bool showBackButton = showPasswordStep && showsUserDropdown();
++  const bool showBackButton = false;
+   const float buttonRadius = Style::scaledRadiusMd();
+   m_loginButton->setRadius(buttonRadius);
+   m_backButton->setRadius(buttonRadius);
+@@ -2319,7 +2319,7 @@
+     if (m_loginButton != nullptr && m_loginButton->inputArea() != nullptr) {
+       m_focusRing.push_back({m_loginButton->inputArea(), [this]() { tryAuthenticate(); }});
+     }
+-    if (m_backButton != nullptr && m_backButton->inputArea() != nullptr && showsUserDropdown()) {
++    if (m_backButton != nullptr && m_backButton->inputArea() != nullptr && m_backButton->visible()) {
+       m_focusRing.push_back({m_backButton->inputArea(), [this]() { runBackAction(); }});
+     }
+   } else if (showsUserDropdown() && m_userSelectArea != nullptr) {
+@@ -2330,7 +2330,7 @@
+                            }});
+   }
+ 
+-  if (m_sessionSelectArea != nullptr) {
++  if (m_sessionSelectArea != nullptr && m_sessionSelectArea->visible()) {
+     m_focusRing.push_back({m_sessionSelectArea, [this]() { toggleSessionMenu(); }});
+   }
+   if (m_schemeSelectArea != nullptr && m_schemeSelectArea->visible()) {
+@@ -2576,6 +2576,15 @@
+     return;
+   }
+ 
++  m_sessionSelectBox->setVisible(false);
++  if (m_sessionSelectIcon != nullptr) {
++    m_sessionSelectIcon->setVisible(false);
++  }
++  m_sessionSelectLabel->setVisible(false);
++  m_sessionSelectGlyph->setVisible(false);
++  m_sessionSelectArea->setVisible(false);
++  return;
++
+   syncPanelSessionChrome();
+   m_sessionSelectBox->setVisible(true);
+   m_sessionSelectBox->setPosition(x, y);

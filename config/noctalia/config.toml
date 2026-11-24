@@ -1,0 +1,220 @@
+[shell]
+corner_radius_scale = 1.0
+font_family = "JetBrainsMono Nerd Font"
+time_format = "{:%H:%M:%S}"
+telemetry_enabled = false
+clipboard_enabled = true
+# Polkit authentication agent: password/fingerprint prompts for admin actions
+# (fprintd-enroll, mounting drives, ...). Without one they are denied outright.
+polkit_agent = true
+
+[shell.animation]
+enabled = true
+speed = 1.2
+
+[shell.shadow]
+direction = "down"
+alpha = 0.4
+
+[shell.panel]
+transparency_mode = "glass"
+borders = false
+border_width = 0.0
+shadow = true
+launcher_placement = "floating"
+clipboard_placement = "floating"
+control_center_placement = "attached"
+launcher_position = "center"
+clipboard_position = "center"
+
+[shell.launcher]
+width = 640
+search_position = "top"
+default_view = "all"
+category_icons_only = true
+show_settings_button = true
+show_session_button = true
+show_icons = true
+show_app_origin_indicator = false
+compact = true
+sort_by_usage = true
+
+[shell.window_switcher]
+style = "compact"
+current_workspace_only = false
+show_all_outputs = false
+show_app_icon = true
+show_caption = true
+show_count = true
+
+# Colors are generated from the wallpaper
+[theme]
+mode = "dark"
+source = "wallpaper"
+wallpaper_scheme = "m3-content"
+pure_black_dark = true
+
+# Wallpaper is drawn by Noctalia; the image lives in assets/wallpapers/default.jpg
+[wallpaper]
+enabled = true
+fill_mode = "crop"
+
+[wallpaper.default]
+path = "/etc/pulsar/wallpaper.jpg"
+
+# Full Edge-to-Edge Top Bar: 0 radius, 0 margins, clean icons only, no text labels
+[bar.main]
+position = "top"
+thickness = 36
+background_opacity = 0.85
+compositor_blur = true
+radius = 0
+margin_ends = 0
+margin_edge = 0
+padding = 16
+widget_spacing = 10
+scale = 1.0
+font_scale = 1.0
+shadow = false
+auto_hide = false
+reserve_space = true
+capsule = false
+
+# Launcher, workspaces, clock, tray, quick sliders, network speed and power draw
+start = ["launcher", "workspaces"]
+center = ["clock"]
+end = ["network_rx", "network_tx", "tray", "volume", "brightness", "power_rate", "battery", "control-center"]
+
+# Dock disabled so it stays exclusively as a clean full topbar
+[dock]
+enabled = false
+
+[notification]
+enable_daemon = true
+show_app_name = true
+layer = "top"
+background_opacity = 0.90
+border = false
+border_width = 0
+
+# Only a fade on lock/unlock instead of a random effect each time.
+# Minimal monochrome look matching the login screen (system/desktop/greetd.nix):
+# solid black, big clock + date, a bare password field and nothing else.
+[lockscreen]
+transition = ["fade"]
+blur_intensity = 0.0
+tint_intensity = 1.0
+tint_color = "#000000"
+
+[lockscreen_widgets]
+enabled = true
+widget_order = ["lock-clock", "lock-date", "lockscreen-login-box@eDP-1"]
+
+[lockscreen_widgets.widget.lock-clock]
+type = "clock"
+output = "eDP-1"
+cx = 900.0
+cy = 470.0
+box_width = 600.0
+box_height = 88.0
+rotation = 0.0
+placement_width = 1800.0
+placement_height = 1200.0
+
+[lockscreen_widgets.widget.lock-clock.settings]
+format = "{:%H:%M}"
+color = "#f5f5f5"
+shadow = false
+background = false
+font_family = "JetBrainsMono Nerd Font"
+
+[lockscreen_widgets.widget.lock-date]
+type = "clock"
+output = "eDP-1"
+cx = 900.0
+cy = 535.0
+box_width = 600.0
+box_height = 20.0
+rotation = 0.0
+placement_width = 1800.0
+placement_height = 1200.0
+
+[lockscreen_widgets.widget.lock-date.settings]
+format = "{:%A, %d %B}"
+color = "#8a8a8a"
+shadow = false
+background = false
+font_family = "JetBrainsMono Nerd Font"
+
+[lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
+type = "login_box"
+output = "eDP-1"
+cx = 900.0
+cy = 640.0
+box_width = 420.0
+box_height = 80.0
+rotation = 0.0
+placement_width = 1800.0
+placement_height = 1200.0
+
+[lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
+layout = "compact"
+background_color = "#000000"
+background_opacity = 0.0
+background_radius = 0.0
+input_opacity = 0.6
+input_radius = 10.0
+center_password_text = true
+show_login_button = false
+show_password_reveal = false
+show_session_buttons = false
+show_media = false
+show_media_controls = false
+show_weather = false
+show_keyboard_layout = false
+show_caps_lock = true
+show_unlock_hint = false
+
+[osd]
+position = "top_right"
+orientation = "horizontal"
+background_opacity = 0.90
+border = false
+border_width = 0
+
+[widget.network]
+show_label = false
+show_vpn_label = false
+
+# Download / upload speed
+[widget.network_rx]
+network_speed_compact = true
+
+[widget.network_tx]
+network_speed_compact = true
+
+# Battery icon shows the supply (bolt while plugged in) and the percentage
+[widget.battery]
+display_mode = "glyph"
+show_label = true
+label_content = "percent"
+
+# Watts: drain on battery, charge rate on AC; hidden when full
+[widget.power_rate]
+type = "battery"
+display_mode = "none"
+show_label = true
+label_content = "rate"
+hide_when_full = true
+
+[widget.clock]
+format = "{:%H:%M}"
+interactive = true
+
+[widget.workspaces]
+style = "regular"
+hide_when_empty = true    # only tags with windows
+focused_color = "#ffffff"
+occupied_color = "#334155"
+empty_color = "#1e293b"
+urgent_color = "#ef4444"

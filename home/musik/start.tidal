@@ -1,0 +1,15 @@
+-- 1. Run `superdirt` in a terminal and wait for "SuperDirt ready".
+-- 2. Put the cursor on a block and press Shift+Enter (VS Code) to play it.
+-- 3. Change something, press Shift+Enter again. hush stops everything.
+
+setcps (120/60/4)
+
+d1 $ sound "bd*2 [~ sd] bd sd"
+
+d2 $ sound "hh*8" # gain 0.8 # pan sine
+
+d3 $ n "0 3 7 <10 12>" # sound "superpiano" # room 0.3
+
+d4 $ every 4 (fast 2) $ n "0 .. 7" # sound "arpy" # lpf 1500
+
+hush
