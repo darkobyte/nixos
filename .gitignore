@@ -1,6 +1,3 @@
-# Environment and secrets
-.env.json
-
 # Nix and build outputs
 result
 result-*

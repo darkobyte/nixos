@@ -1,15 +1,12 @@
-{ lib, env, ... }:
+{ lib, user, ... }:
 {
-  # Git user settings loaded from env
+  # Git identity from users/<name>.nix (fullName, email)
   programs.git = {
     enable = true;
     lfs.enable = true;
     settings = {
-    } // lib.optionalAttrs (env ? fullName) {
-      user.name = env.fullName;
-    } // lib.optionalAttrs (env ? email) {
-      user.email = env.email;
-    } // {
+      user = lib.optionalAttrs (user ? fullName) { name = user.fullName; }
+        // lib.optionalAttrs (user ? email) { email = user.email; };
       init.defaultBranch = "main";
       pull.rebase = true;
     };

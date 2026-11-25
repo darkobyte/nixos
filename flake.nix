@@ -31,23 +31,39 @@
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, antigravity-nix, noctalia, ... }@inputs:
     let
       system = "x86_64-linux";
-      envPath = ./.env.json;
-      fallbackEnv = {
-        username = "gianluca";
-        hostname = "dumbledore";
-        timezone = "Europe/Rome";
-        locale = "en_US.UTF-8";
-      };
-      env =
-        if builtins.pathExists envPath
-        then builtins.fromJSON (builtins.readFile envPath)
-        else fallbackEnv;
+      lib = nixpkgs.lib;
 
-      # Builds hosts/<name>: default.nix is the system layer, home.nix the Home Manager layer
-      mkHost = name: nixpkgs.lib.nixosSystem {
+      # Owns the config repo (~/nixos): autopull, login default, trusted Nix user
+      owner = "gianluca";
+
+      # Accounts: every users/<name>.nix is picked up automatically
+      userFiles = lib.filterAttrs (file: type: type == "regular" && lib.hasSuffix ".nix" file)
+        (builtins.readDir ./users);
+      users = lib.mapAttrs' (file: _:
+        lib.nameValuePair (lib.removeSuffix ".nix" file) (import ./users/${file})
+      ) userFiles;
+
+      # Accounts on one host, with their app list resolved (shared apps + this host's)
+      usersOn = host: lib.mapAttrs (name: u: removeAttrs u [ "hosts" ] // {
+        inherit name;
+        admin = u.admin or false;
+        apps = (u.apps or [ ]) ++ u.hosts.${host};
+      }) (lib.filterAttrs (_: u: (u.hosts or { }) ? ${host}) users);
+
+      # Builds hosts/<name> (system layer) with every account from users/ that lists it
+      mkHost = name:
+        let
+          hostUsers = usersOn name;
+        in
+        nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {
-          inherit inputs env;
+          inherit inputs owner hostUsers;
+          # Users on this host whose apps include home/<prefix> (e.g. "gaming"):
+          # system features like Steam or Docker turn on only when someone needs them
+          usersNeeding = prefix: lib.attrNames (lib.filterAttrs (_: u:
+            lib.any (app: app == prefix || lib.hasPrefix "${prefix}/" app) u.apps
+          ) hostUsers);
         };
         modules = [
           {
@@ -80,12 +96,16 @@
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "backup";
             home-manager.extraSpecialArgs = {
-              inherit inputs env;
+              inherit inputs;
             };
-            home-manager.users.${env.username}.imports = [
-              ./home
-              ./hosts/${name}/home.nix
-            ];
+            # Base profile for everyone (home/default.nix) + the user's own apps
+            home-manager.users = lib.mapAttrs (_: user: {
+              _module.args.user = user;
+              imports = [
+                ./home
+                { imports = map (app: ./home + "/${app}") user.apps; }
+              ];
+            }) hostUsers;
           }
         ];
       };

@@ -1,6 +1,6 @@
-{ pkgs, env, ... }:
+{ pkgs, owner, ... }:
 let
-  repo = "/home/${env.username}/nixos";
+  repo = "/home/${owner}/nixos";
 in
 {
   # Pulls the config repo once the network is up after boot. Fast-forward only:
@@ -13,7 +13,7 @@ in
     path = [ pkgs.git pkgs.openssh ];
     serviceConfig = {
       Type = "oneshot";
-      User = env.username;
+      User = owner;
       WorkingDirectory = repo;
     };
     # Wi-Fi can come up well after network-online, so retry for ~5 minutes

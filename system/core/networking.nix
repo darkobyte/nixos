@@ -1,7 +1,6 @@
-{ pkgs, env, ... }:
+{ pkgs, ... }:
 {
   networking = {
-    hostName = env.hostname or "pulsar-node";
     networkmanager = {
       enable = true;
       # Cisco AnyConnect / Secure Client compatible VPN (TU Darmstadt campus VPN)

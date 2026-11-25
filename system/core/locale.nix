@@ -1,7 +1,7 @@
-{ env, ... }:
+{ ... }:
 {
-  time.timeZone = env.timezone or "Europe/Rome";
-  i18n.defaultLocale = env.locale or "en_US.UTF-8";
+  time.timeZone = "Europe/Rome";
+  i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "it_IT.UTF-8";
     LC_IDENTIFICATION = "it_IT.UTF-8";

@@ -1,4 +1,4 @@
-{ env, ... }:
+{ lib, usersNeeding, ... }:
 {
   virtualisation.docker = {
     enable = true;
@@ -8,5 +8,8 @@
     };
   };
 
-  users.users.${env.username}.extraGroups = [ "docker" ];
+  # Everyone with development apps on this host
+  users.users = lib.genAttrs (usersNeeding "development") (_: {
+    extraGroups = [ "docker" ];
+  });
 }

@@ -1,6 +1,6 @@
 { ... }:
 {
-  # System layer: boot, hardware, daemons. Apps are in ./home.nix (Home Manager).
+  # System layer: boot, hardware, daemons. Accounts and their apps are in users/<name>.nix.
   imports = [
     ./hardware-configuration.nix
 
@@ -10,4 +10,6 @@
     ../../system/gaming
     ../../system/hardware/bluetooth.nix
   ];
+
+  networking.hostName = "dumbledore";
 }

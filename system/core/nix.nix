@@ -1,10 +1,10 @@
-{ env, ... }:
+{ owner, ... }:
 {
   nix = {
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
       auto-optimise-store = true;
-      trusted-users = [ "root" "@wheel" env.username ];
+      trusted-users = [ "root" "@wheel" owner ];
     };
     gc = {
       automatic = true;

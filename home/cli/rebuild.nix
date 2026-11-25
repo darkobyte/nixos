@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, user, ... }:
 let
   repo = "${config.home.homeDirectory}/nixos";
 
@@ -58,5 +58,6 @@ let
   '';
 in
 {
-  home.packages = [ rebuild ];
+  # Only admins: it needs sudo and the config repo in their home
+  home.packages = lib.optional user.admin rebuild;
 }

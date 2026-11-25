@@ -1,4 +1,4 @@
-{ pkgs, inputs, env, ... }:
+{ pkgs, inputs, owner, ... }:
 let
   # Session entry for the greeter's picker. mangowc's own "Mango" entry runs the bare
   # compositor; this one goes through mango-session (system/desktop/mango.nix).
@@ -28,10 +28,10 @@ in
       inputs.noctalia-greeter.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
         patches = (old.patches or [ ]) ++ [ ./patches/noctalia-greeter-minimal.patch ];
       });
-    passwordless-sync-users = [ env.username ];
+    passwordless-sync-users = [ owner ];
     settings = {
       session.default = "mango-session";
-      user.default = env.username;
+      user.default = owner;
 
       # Minimal monochrome look: no logo or scheme picker, plain password dots.
       # A complete palette here wins over anything Sync writes.

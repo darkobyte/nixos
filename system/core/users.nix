@@ -1,15 +1,17 @@
-{ pkgs, env, ... }:
+{ lib, pkgs, hostUsers, ... }:
 {
   # users.mutableUsers = true ensures that system activation never resets or alters passwords
   users.mutableUsers = true;
 
-  users.users.${env.username} = {
+  # One account per users/<name>.nix that lists this host. Removing it from there
+  # removes the account on the next switch; the home folder is left on disk.
+  users.users = lib.mapAttrs (name: user: {
     isNormalUser = true;
-    description = env.fullName or env.username;
+    description = user.fullName or name;
     shell = pkgs.zsh;
     extraGroups = [
       "networkmanager"
-      "wheel"
+    ] ++ lib.optional user.admin "wheel" ++ [
       "video"
       "input"
       "dialout"
@@ -18,7 +20,9 @@
       "audio"
     ];
     linger = true;
-  };
+    # First login only (users/<name>.nix); change it afterwards with `passwd`
+    initialPassword = user.initialPassword or null;
+  }) hostUsers;
 
   programs.zsh.enable = true;
 }
