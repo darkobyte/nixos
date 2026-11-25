@@ -3,7 +3,11 @@ corner_radius_scale = 1.0
 font_family = "JetBrainsMono Nerd Font"
 time_format = "{:%H:%M:%S}"
 telemetry_enabled = false
-clipboard_enabled = false
+# Built-in clipboard history (Super+V). Pins survive reboots; the unpinned history is
+# cleared once per boot (home/desktop/noctalia.nix).
+clipboard_enabled = true
+clipboard_history_max_entries = 100
+clipboard_auto_paste = "off"
 # Polkit authentication agent: password/fingerprint prompts for admin actions
 # (fprintd-enroll, mounting drives, ...). Without one they are denied outright.
 polkit_agent = true
@@ -17,7 +21,7 @@ direction = "down"
 alpha = 0.4
 
 [shell.panel]
-transparency_mode = "glass"
+transparency_mode = "solid"
 borders = false
 border_width = 0.0
 shadow = true
@@ -27,17 +31,19 @@ control_center_placement = "attached"
 launcher_position = "center"
 clipboard_position = "center"
 
+# Super+Space. Simple layout: just a search field and the results, nothing else
 [shell.launcher]
-width = 640
-search_position = "top"
-default_view = "all"
+layout = "simple"
+categories = false
 category_icons_only = true
-show_settings_button = true
-show_session_button = true
+show_settings_button = false
+show_session_button = false
 show_icons = true
 show_app_origin_indicator = false
 compact = true
+app_grid = false
 sort_by_usage = true
+auto_paste = "off"
 
 [shell.window_switcher]
 style = "compact"
@@ -47,11 +53,12 @@ show_app_icon = true
 show_caption = true
 show_count = true
 
-# Colors are generated from the wallpaper
+# Fixed monochrome palette (programs.noctalia.customPalettes.Mono in
+# home/desktop/noctalia.nix), same colors as the login screen
 [theme]
 mode = "dark"
-source = "wallpaper"
-wallpaper_scheme = "m3-content"
+source = "custom"
+custom_palette = "Mono"
 pure_black_dark = true
 
 # Wallpaper is drawn by Noctalia; the image lives in assets/wallpapers/default.jpg
@@ -215,6 +222,6 @@ interactive = true
 style = "regular"
 hide_when_empty = true    # only tags with windows
 focused_color = "#ffffff"
-occupied_color = "#334155"
-empty_color = "#1e293b"
+occupied_color = "#525252"
+empty_color = "#262626"
 urgent_color = "#ef4444"
